@@ -1,18 +1,27 @@
 package com.packt.webstore.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.InternalResourceView;
 
 import com.packt.webstore.domain.Product;
 import com.packt.webstore.service.ProductService;
@@ -77,6 +86,7 @@ public class ProductController {
 		return "product";
 	}
 
+	// http://localhost:8080/webstore/products/add
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String getAddNewProductForm(Model model) {
 		Product newProduct = new Product();
@@ -85,9 +95,62 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String processAddNewProductForm(@ModelAttribute("newProduct") Product newProduct) {
-		productService.addProduct(newProduct);
+	public String processAddNewProductForm(@ModelAttribute("newProduct") Product productToBeAdded, BindingResult result,
+			HttpServletRequest request) {
+		MultipartFile productImage = productToBeAdded.getProductImage();
+		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+		if (productImage != null && !productImage.isEmpty()) {
+			try {
+				productImage.transferTo(
+						new File(rootDirectory + "resources\\images\\" + productToBeAdded.getProductId() + ".png"));
+			} catch (Exception e) {
+				throw new RuntimeException("Product Image saving failed", e);
+			}
+		}
+		productService.addProduct(productToBeAdded);
 		return "redirect:/products";
 	}
+	@InitBinder
+	public void initialiseBinder(WebDataBinder binder) {
+		binder.setAllowedFields("productId","name","unitPrice","description","manufacturer","category","unitsInStock", "condition","productImage","language");
+	}
+
+	// Not recommended
+	// http://localhost:8080/webstore/products/home
+	@RequestMapping("/home")
+	public ModelAndView greeting(Map<String, Object> model) {
+		model.put("greeting", "Welcome to Web Store!");
+		model.put("tagline", "The one and only amazing web store");
+		View view = new InternalResourceView("/WEB-INF/views/welcome.jsp");
+		return new ModelAndView(view, model);
+	}
+
+	// http://localhost:8080/webstore/products/welcome/greeting
+	// nothing particular be seen on page as model.put not used
+	@RequestMapping("/welcome/greeting")
+	public String greeting() {
+		return "welcome";
+	}
+
+	// http://localhost:8080/webstore/products/welcome/greeting
+	// nothing particular be seen on page as model.put not used
+	@RequestMapping("/welcome/greeting2")
+	public String greeting2() {
+		return "forward:/products/welcome/greeting";
+	}
+
+	// http://localhost:8080/webstore/products/welcome/greeting
+	// nothing particular be seen on page as model.put not used
+	@RequestMapping("/welcome/greeting3")
+	public String greeting3() {
+		return "redirect:/products/welcome/greeting";
+	}
+
+	// @RequestMapping("/")
+	// public String welcome(Model model) {
+	// model.addAttribute("greeting", "Welcome to Web Store!");
+	// model.addAttribute("tagline", "The one and only amazing web store");
+	// return "forward:/welcome/greeting";
+	// }
 
 }

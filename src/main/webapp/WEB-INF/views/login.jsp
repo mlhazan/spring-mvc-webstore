@@ -35,8 +35,7 @@ tstrap.min.css">
 								<br />
 							</div>
 						</c:if>
-						<form action="<c:url value= "/j_spring_security_check">
-</c:url>"
+						<form action="<c:url value= "/j_spring_security_check"></c:url>"
 							method="post">
 							<fieldset>
 								<div class="form-group">

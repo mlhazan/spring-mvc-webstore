@@ -2,6 +2,8 @@ package com.packt.webstore.domain;
 
 import java.math.BigDecimal;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Product {
 	private String productId;
 	private String name;
@@ -13,6 +15,7 @@ public class Product {
 	private long unitsInOrder;
 	private boolean discontinued;
 	private String condition;
+	private MultipartFile productImage;
 
 	public Product() {
 		super();
@@ -104,34 +107,42 @@ public class Product {
 		this.condition = condition;
 	}
 
+	public MultipartFile getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(MultipartFile productImage) {
+		this.productImage = productImage;
+	}
+
 	// add setters and getters for all the fields here
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Product other = (Product) obj;
-//		if (productId == null) {
-//			if (other.productId != null)
-//				return false;
-//		} else if (!productId.equals(other.productId))
-//			return false;
-//		return true;
-//	}
-//
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((productId == null) ? 0 : productId.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public String toString() {
-//		return "Product [productId=" + productId + ", name=" + name + "]";
-//	}
+	// @Override
+	// public boolean equals(Object obj) {
+	// if (this == obj)
+	// return true;
+	// if (obj == null)
+	// return false;
+	// if (getClass() != obj.getClass())
+	// return false;
+	// Product other = (Product) obj;
+	// if (productId == null) {
+	// if (other.productId != null)
+	// return false;
+	// } else if (!productId.equals(other.productId))
+	// return false;
+	// return true;
+	// }
+	//
+	// @Override
+	// public int hashCode() {
+	// final int prime = 31;
+	// int result = 1;
+	// result = prime * result + ((productId == null) ? 0 : productId.hashCode());
+	// return result;
+	// }
+	//
+	// @Override
+	// public String toString() {
+	// return "Product [productId=" + productId + ", name=" + name + "]";
+	// }
 }
