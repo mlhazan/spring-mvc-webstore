@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,8 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.InternalResourceView;
 
 import com.packt.webstore.domain.Product;
+import com.packt.webstore.exception.NoProductsFoundUnderCategoryException;
+import com.packt.webstore.exception.ProductNotFoundException;
 import com.packt.webstore.service.ProductService;
 //import com.packt.webstore.domain.Product;
 
@@ -65,9 +68,18 @@ public class ProductController {
 	}
 
 	// http://localhost:8080/webstore/products/tablet
+	/**
+	 * public String getProductsByCategory(Model model, @PathVariable("category")
+	 * String productCategory) { model.addAttribute("products",
+	 * productService.getProductsByCategory(productCategory)); return "products"; }
+	 */
 	@RequestMapping("/{category}")
-	public String getProductsByCategory(Model model, @PathVariable("category") String productCategory) {
-		model.addAttribute("products", productService.getProductsByCategory(productCategory));
+	public String getProductsByCategory(Model model, @PathVariable("category") String category) {
+		List<Product> products = productService.getProductsByCategory(category);
+		if (products == null || products.isEmpty()) {
+			throw new NoProductsFoundUnderCategoryException();
+		}
+		model.addAttribute("products", products);
 		return "products";
 	}
 
@@ -110,9 +122,11 @@ public class ProductController {
 		productService.addProduct(productToBeAdded);
 		return "redirect:/products";
 	}
+
 	@InitBinder
 	public void initialiseBinder(WebDataBinder binder) {
-		binder.setAllowedFields("productId","name","unitPrice","description","manufacturer","category","unitsInStock", "condition","productImage","language");
+		binder.setAllowedFields("productId", "name", "unitPrice", "description", "manufacturer", "category",
+				"unitsInStock", "condition", "productImage", "language");
 	}
 
 	// Not recommended
@@ -152,5 +166,13 @@ public class ProductController {
 	// model.addAttribute("tagline", "The one and only amazing web store");
 	// return "forward:/welcome/greeting";
 	// }
-
+	@ExceptionHandler(ProductNotFoundException.class)
+	public ModelAndView handleError(HttpServletRequest req, ProductNotFoundException exception) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("invalidProductId", exception.getProductId());
+		mav.addObject("exception", exception);
+		mav.addObject("url", req.getRequestURL() + "?" + req.getQueryString());
+		mav.setViewName("productNotFound");
+		return mav;
+	}
 }

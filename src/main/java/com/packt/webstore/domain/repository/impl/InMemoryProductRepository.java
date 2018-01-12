@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.stereotype.Repository;
 import com.packt.webstore.domain.Product;
 import com.packt.webstore.domain.repository.ProductRepository;
+import com.packt.webstore.exception.ProductNotFoundException;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
@@ -44,6 +45,22 @@ public class InMemoryProductRepository implements ProductRepository {
 		return listOfProducts;
 	}
 
+	// public Product getProductById(String productId) {
+	// Product productById = null;
+	// for (Product product : listOfProducts) {
+	// if (product != null && product.getProductId() != null &&
+	// product.getProductId().equals(productId)) {
+	// productById = product;
+	// break;
+	// }
+	// }
+	// if (productById == null) {
+	// throw new IllegalArgumentException("No products found with the product id: "
+	// + productId);
+	// }
+	// return productById;
+	// }
+
 	public Product getProductById(String productId) {
 		Product productById = null;
 		for (Product product : listOfProducts) {
@@ -53,7 +70,7 @@ public class InMemoryProductRepository implements ProductRepository {
 			}
 		}
 		if (productById == null) {
-			throw new IllegalArgumentException("No products found with the product id: " + productId);
+			throw new ProductNotFoundException("No products found withthe product id: " + productId);
 		}
 		return productById;
 	}
@@ -92,6 +109,6 @@ public class InMemoryProductRepository implements ProductRepository {
 
 	public void addProduct(Product product) {
 		listOfProducts.add(product);
-		
+
 	}
 }
