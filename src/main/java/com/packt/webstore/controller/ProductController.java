@@ -166,6 +166,8 @@ public class ProductController {
 	// model.addAttribute("tagline", "The one and only amazing web store");
 	// return "forward:/welcome/greeting";
 	// }
+
+	// http://localhost:8080/webstore/products/product?id=P12349
 	@ExceptionHandler(ProductNotFoundException.class)
 	public ModelAndView handleError(HttpServletRequest req, ProductNotFoundException exception) {
 		ModelAndView mav = new ModelAndView();
@@ -174,5 +176,10 @@ public class ProductController {
 		mav.addObject("url", req.getRequestURL() + "?" + req.getQueryString());
 		mav.setViewName("productNotFound");
 		return mav;
+	}
+
+	@RequestMapping("/invalidPromoCode")
+	public String invalidPromoCode() {
+		return "invalidPromoCode";
 	}
 }
