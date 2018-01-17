@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,8 @@ import com.packt.webstore.domain.Product;
 import com.packt.webstore.exception.NoProductsFoundUnderCategoryException;
 import com.packt.webstore.exception.ProductNotFoundException;
 import com.packt.webstore.service.ProductService;
+import com.packt.webstore.validator.ProductValidator;
+import com.packt.webstore.validator.UnitsInStockValidator;
 //import com.packt.webstore.domain.Product;
 
 @Controller
@@ -36,6 +39,10 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	// @Autowired
+	// private UnitsInStockValidator unitsInStockValidator;
+	@Autowired
+	private ProductValidator productValidator;
 
 	/**
 	 * ProductService is an Interface and InmemoryProductRepository is Repository
@@ -107,8 +114,11 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String processAddNewProductForm(@ModelAttribute("newProduct") Product productToBeAdded, BindingResult result,
-			HttpServletRequest request) {
+	public String processAddNewProductForm(@ModelAttribute("newProduct") @Valid Product productToBeAdded,
+			BindingResult result, HttpServletRequest request) {
+		if (result.hasErrors()) {
+			return "addProduct";
+		}
 		MultipartFile productImage = productToBeAdded.getProductImage();
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
 		if (productImage != null && !productImage.isEmpty()) {
@@ -127,6 +137,8 @@ public class ProductController {
 	public void initialiseBinder(WebDataBinder binder) {
 		binder.setAllowedFields("productId", "name", "unitPrice", "description", "manufacturer", "category",
 				"unitsInStock", "condition", "productImage", "language");
+		//binder.setValidator(unitsInStockValidator);
+		binder.setValidator(productValidator);
 	}
 
 	// Not recommended
