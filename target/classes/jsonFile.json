@@ -1,0 +1,22 @@
+{
+	"cartId": "1234",
+	"cartItems": {
+		"P1234": {
+			"product": {
+				"productId": "P1234",
+				"name": "iPhone 5s",
+				"unitPrice": 500,
+				"description": "AppleiPhone5ssmartphonewith4.00-inch640x1136displayand8-megapixelrearcamera",
+				"manufacturer": "Apple",
+				"category": "Smart Phone",
+				"unitsInStock": 1000,
+				"unitsInOrder": 0,
+				"discontinued": false,
+				"condition": "NEW"
+			},
+			"quantity": 1,
+			"totalPrice": 500
+		}
+	},
+	"grandTotal": 500
+}

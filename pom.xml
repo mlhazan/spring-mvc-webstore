@@ -71,6 +71,13 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.3.1.Final</version>
 		</dependency>
+		<!-- Spring HATEOAS -->
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.24.0.RELEASE</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>webstore</finalName>
