@@ -1,5 +1,6 @@
 package com.packt.webstore.domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 @SuppressWarnings("restriction")
 @XmlRootElement
-public class Product {
+public class Product implements Serializable {
+	
+	private static final long serialVersionUID = 2475946468214074276L;
 	@Pattern(regexp="P[0-9]+", message="{Pattern.Product.productId.validation}")
 	@ProductId
 	private String productId;
