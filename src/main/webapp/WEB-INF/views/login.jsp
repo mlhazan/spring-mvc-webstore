@@ -12,14 +12,14 @@ tstrap.min.css">
 <title>Products</title>
 </head>
 <body>
-	<section>
+	<!-- <section>
 		<div class="jumbotron">
 			<div class="container">
 				<h1>Products</h1>
 				<p>Add products</p>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">

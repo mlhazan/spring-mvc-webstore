@@ -10,13 +10,13 @@ tstrap.min.css">
 <title>Invalid promo code</title>
 </head>
 <body>
-	<section>
+	<!-- <section>
 		<div class="jumbotron">
 			<div class="container">
 				<h1 class="alert alert-danger">Invalid promo code</h1>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<section>
 		<div class="container">
 			<p>
